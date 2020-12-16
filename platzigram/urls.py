@@ -16,6 +16,7 @@ urlpatterns = [
     path('hello-word/',local_views.hello_word),
     path('sorted/',local_views.sorted),
     path('hi/<str:name>/<int:age>/',local_views.hi),
-    path('posts/',posts_views.list_posts )
+    path('posts/',posts_views.list_posts ),
+    path('admin/', admin.site.urls)
 
 ]
