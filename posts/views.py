@@ -25,7 +25,6 @@ def list_posts(request):
     return render(request, 'posts/feed.html', {'posts': posts})
 
 @login_required
-
 def create_post(request):
     """Create new post view."""
     if request.method == 'POST':
