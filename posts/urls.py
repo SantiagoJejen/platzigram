@@ -10,7 +10,7 @@ urlpatterns = [
 
     path(
         route='',
-        view=views.list_posts,
+        view=views.PostsFeedView.as_view(),
         name='feed'
     ),
 
@@ -18,5 +18,12 @@ urlpatterns = [
         route='posts/new/',
         view=views.create_post,
         name='create'
+    ),
+
+    path( 
+        route = 'posts/<int:pk>/',
+        view = views.PostDetailView.as_view(),
+        name = 'detail'
+
     ),
 ]
