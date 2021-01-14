@@ -3,6 +3,7 @@
 # Django
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import views as auth_views
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, FormView, UpdateView
 from django.urls import reverse, reverse_lazy
@@ -33,20 +34,25 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         context['posts'] = Post.objects.filter(user=user).order_by('-created')
         return context
 
-def login_view(request):
+class LoginView(auth_views.LoginView):
     """Login view."""
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            return redirect('posts:feed')
-        else:
-            return render(request, 'users/login.html', {'error': 'Invalid username and password'})
+    template_name = 'users/login.html'
+    redirect_authenticated_user = True
 
-    return render(request, 'users/login.html')
-
+#def login_view(request):
+#    """Login view."""
+#    if request.method == 'POST':
+#        username = request.POST['username']
+#        password = request.POST['password']
+#        user = authenticate(request, username=username, password=password)
+#        if user:
+#            login(request, user)
+#            return redirect('posts:feed')
+#        else:
+#            return render(request, 'users/login.html', {'error': 'Invalid username and password'})
+#
+#    return render(request, 'users/login.html')
+#
 
 class SignupView(FormView):
     """ Users signup view. """
@@ -78,12 +84,15 @@ class SignupView(FormView):
 #        )
 #
 
+class LogoutView(LoginRequiredMixin, auth_views.LogoutView):
+    """Logout view."""
 
-@login_required
-def logout_view(request):
-    """Logout a user."""
-    logout(request)
-    return redirect('users:login')
+    template_name = 'users/logged_out.html'
+#@login_required
+#def logout_view(request):
+#    """Logout a user."""
+#    logout(request)
+#    return redirect('users:login')
 
 class UpdateProfile(LoginRequiredMixin, UpdateView):
     """Update a user's profile view."""
